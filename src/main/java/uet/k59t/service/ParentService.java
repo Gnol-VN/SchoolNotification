@@ -38,11 +38,15 @@ public class ParentService {
 
 
     public ParentDTO createParent(Parent parent) {
-        parent.setToken(UUID.randomUUID().toString());
-        parentRepository.save(parent);
-        ParentDTO parentDTO = new ParentDTO();
-        parentDTO.setParentName(parent.getParentName());
-        return parentDTO;
+        if(parentRepository.findByParentName(parent.getParentName())==null ){
+            parent.setToken(UUID.randomUUID().toString());
+            parentRepository.save(parent);
+            ParentDTO parentDTO = new ParentDTO();
+            parentDTO.setParentName(parent.getParentName());
+            return parentDTO;
+        }
+        else throw new NullPointerException("Parent name is already exist");
+
     }
 
     public StudentDTO createStudent(StudentDTO studentDTO) {

@@ -25,10 +25,17 @@ public class ConversationController {
         return conversationService.createConversation(token,conversationDTO);
     }
 
-    @RequestMapping(value = "conversation/join/{conversationId}", method = RequestMethod.GET)
-    public ConversationDTO joinConversation(@PathVariable Long conversationId){
+//    @RequestMapping(value = "conversation/join/{conversationId}", method = RequestMethod.GET)
+//    public ConversationDTO joinConversation(@PathVariable Long conversationId){
+//        String token = httpServletRequest.getHeader("token");
+//        return conversationService.join(token,conversationId);
+//    }
+
+    @RequestMapping(value = "conversation/invite/{conversationId}/{parentName}", method = RequestMethod.POST)
+    public ConversationDTOwithStaffAndParent invite(@PathVariable Long conversationId, @PathVariable String parentName){
         String token = httpServletRequest.getHeader("token");
-        return conversationService.join(token,conversationId);
+        return conversationService.invite(token,conversationId,parentName);
+
     }
 
     @RequestMapping(value = "conversation/find/byconversationid/{conversationId}", method = RequestMethod.GET)
