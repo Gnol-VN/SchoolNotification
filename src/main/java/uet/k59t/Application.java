@@ -23,48 +23,48 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
     }
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**");
-            }
-        };
-    }
 //    @Bean
-//    public FilterRegistrationBean corsFilter() {
-//        return new FilterRegistrationBean(new Filter() {
-//            public void doFilter(ServletRequest req, ServletResponse res,
-//                                 FilterChain chain) throws IOException, ServletException {
-//                HttpServletRequest request = (HttpServletRequest) req;
-//                HttpServletResponse response = (HttpServletResponse) res;
-//                String method = request.getMethod();
-//// this origin value could just as easily have come from a database
-//                response.setHeader("Access-Control-Allow-Origin", "*");
-//                response.setHeader("Access-Control-Allow-Methods",
-//                        "POST,GET,OPTIONS,DELETE, PUT");
-//                response.setHeader("Access-Control-Max-Age", Long.toString(60 * 60));
-//                response.setHeader("Access-Control-Allow-Credentials", "true");
-//                response.setHeader(
-//                        "Access-Control-Allow-Headers",
-//                        "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method," +
-//                                "Access-Control-Request-Headers,Authorization," +
-//                                "auth-token,ra_preferred_ip," +
-//                                "Pragma,Cache-Control,Expires");
-//                if ("OPTIONS".equals(method)) {
-//                    response.setStatus(HttpStatus.OK.value());
-//                } else {
-//                    chain.doFilter(req, res);
-//                }
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurerAdapter() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/api/**");
 //            }
-//
-//            public void init(FilterConfig filterConfig) {
-//            }
-//
-//            public void destroy() {
-//            }
-//        });
+//        };
 //    }
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        return new FilterRegistrationBean(new Filter() {
+            public void doFilter(ServletRequest req, ServletResponse res,
+                                 FilterChain chain) throws IOException, ServletException {
+                HttpServletRequest request = (HttpServletRequest) req;
+                HttpServletResponse response = (HttpServletResponse) res;
+                String method = request.getMethod();
+// this origin value could just as easily have come from a database
+                response.setHeader("Access-Control-Allow-Origin", "*");
+                response.setHeader("Access-Control-Allow-Methods",
+                        "POST,GET,OPTIONS,DELETE, PUT");
+                response.setHeader("Access-Control-Max-Age", Long.toString(60 * 60));
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+                response.setHeader(
+                        "Access-Control-Allow-Headers",
+                        "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method," +
+                                "Access-Control-Request-Headers,Authorization," +
+                                "token,isAdmin,ra_preferred_ip," +
+                                "Pragma,Cache-Control,Expires");
+                if ("OPTIONS".equals(method)) {
+                    response.setStatus(HttpStatus.OK.value());
+                } else {
+                    chain.doFilter(req, res);
+                }
+            }
+
+            public void init(FilterConfig filterConfig) {
+            }
+
+            public void destroy() {
+            }
+        });
+    }
 }
 

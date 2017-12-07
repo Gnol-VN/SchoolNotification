@@ -11,6 +11,15 @@ public class StaffDTO {
     private String password;
     private Unit unit;
     private Position position;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Unit getUnit() {
         return unit;

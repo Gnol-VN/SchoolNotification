@@ -56,6 +56,7 @@ public class StudentService {
         //Create ParentDTO and assign to StudentDTO
         ParentDTO parentDTO = new ParentDTO();
         parentDTO.setParentName(student.getParent().getParentName());
+        parentDTO.setPhone(student.getParent().getPhone());
         studentDTO.setParentDTO(parentDTO);
 
         //Get list of staffs who are teaching this student
@@ -67,6 +68,8 @@ public class StudentService {
             staffDTO.setPosition(staff1.getPosition());
             staffDTO.setUnit(staff1.getUnit());
             staffDTO.setPassword(null);
+            staffDTO.setPhone(staff1.getPhone());
+            staffDTO.getUnit().setStaffList(null);
             staffDTOS.add(staffDTO);
         }
         studentDTO.setStaffDTOList(staffDTOS);

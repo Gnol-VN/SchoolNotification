@@ -3,6 +3,7 @@ package uet.k59t.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.k59t.controller.dto.StaffDTO;
+import uet.k59t.controller.dto.StaffDTOwithPositionAndUnitname;
 import uet.k59t.controller.dto.StaffDTOwithStudents;
 import uet.k59t.model.Position;
 import uet.k59t.model.Staff;
@@ -39,6 +40,7 @@ public class StaffService {
             staff = new Staff();
             staff.setStaffName(staffDTO.getStaffName());
             staff.setPassword(staffDTO.getPassword());
+            staff.setPhone(staffDTO.getPhone());
             Position position = positionRepostiory.findByPositionName(staffDTO.getPosition().getPositionName());
             Unit unit = unitRepository.findByUnitName(staffDTO.getUnit().getUnitName());
             staff.setPosition(position);
@@ -61,6 +63,8 @@ public class StaffService {
             staffDTO.setStaffName(staff.getStaffName());
             staffDTO.setPosition(staff.getPosition());
             staffDTO.setUnit(staff.getUnit());
+            staffDTO.setPhone(staff.getPhone());
+            staffDTO.getUnit().setStaffList(null);
             return staffDTO;
         }
         else throw new NullPointerException("Invalid id");
@@ -72,12 +76,35 @@ public class StaffService {
         staffDTOwithStudents.setStaffName(staff.getStaffName());
         staffDTOwithStudents.setPosition(staff.getPosition());
         staffDTOwithStudents.setUnit(staff.getUnit());
+        staffDTOwithStudents.setPhone(staff.getPhone());
         //Get studentList of this staff
         List<Student> studentList  = studentRepository.findByStaffList_StaffName(staffName);
         for (int i = 0; i < studentList.size(); i++) {
             studentList.get(i).setStaffList(null);
+            studentList.get(i).setParent(null);
         }
         staffDTOwithStudents.setStudentList(studentList);
+        staffDTOwithStudents.getUnit().setStaffList(null);
         return staffDTOwithStudents;
+    }
+
+    public Staff login(StaffDTO staffDTO) {
+        Staff staff = staffRepository.findBystaffName(staffDTO.getStaffName());
+        if(staff == null){
+            throw new NullPointerException("This staff is not exist");
+        }
+        else if(!staff.getPassword().equals(staffDTO.getPassword())){
+            throw new NullPointerException("Invalid username/password");
+        }
+        else {
+            staff.setPassword(null);
+            staff.setConversationList(null);
+            staff.setStudentList(null);
+            staff.setId(null);
+            staff.setStudentList(null);
+            staff.getUnit().setStaffList(null);
+            return staff;
+        }
+
     }
 }

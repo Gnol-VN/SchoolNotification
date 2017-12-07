@@ -14,6 +14,15 @@ public class Parent {
     private String parentName;
     private String parentPassword;
     private String token;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getToken() {
         return token;

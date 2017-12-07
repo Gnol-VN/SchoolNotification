@@ -108,7 +108,9 @@ public class ConversationService {
             StaffDTO staffDTO = new StaffDTO();
             staffDTO.setStaffName(staff.getStaffName());
             staffDTO.setPosition(staff.getPosition());
+            staffDTO.setPhone(staff.getPhone());
             staffDTO.setUnit(staff.getUnit());
+            staffDTO.getUnit().setStaffList(null);
             staffDTOList.add(staffDTO);
         }
         conversationDTOwithStaffAndParent.setStaffDTOList(staffDTOList);
@@ -118,6 +120,7 @@ public class ConversationService {
             Parent parent = conversation.getParentList().get(i);
             ParentDTO parentDTO = new ParentDTO();
             parentDTO.setParentName(parent.getParentName());
+            parentDTO.setPhone(parent.getPhone());
             parentDTOList.add(parentDTO);
         }
         conversationDTOwithStaffAndParent.setParentDTOS(parentDTOList);

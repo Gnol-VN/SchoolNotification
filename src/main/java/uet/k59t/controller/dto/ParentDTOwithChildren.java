@@ -10,6 +10,15 @@ import java.util.List;
 public class ParentDTOwithChildren {
     private String parentName;
     private List<StudentDTO> studentDTOList;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getParentName() {
         return parentName;

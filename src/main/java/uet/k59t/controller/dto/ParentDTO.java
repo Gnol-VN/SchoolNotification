@@ -6,6 +6,15 @@ package uet.k59t.controller.dto;
 public class ParentDTO {
     private Long parentId;
     private String parentName;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Long getParentId() {
         return parentId;

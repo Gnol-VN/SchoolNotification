@@ -14,6 +14,15 @@ public class StaffDTOwithStudents {
     private Unit unit;
     private Position position;
     private List<Student> studentList;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getStaffName() {
         return staffName;

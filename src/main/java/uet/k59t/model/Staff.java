@@ -12,6 +12,15 @@ public class Staff  {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String staffName;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     @ManyToOne(optional = false)
     @JoinColumn(name="positionId")

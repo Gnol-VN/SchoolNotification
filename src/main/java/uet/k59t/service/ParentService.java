@@ -31,7 +31,9 @@ public class ParentService {
         for (int i = 0; i < parents.size(); i++) {
             ParentDTO parentDTO  = new ParentDTO();
 //            parentDTO.setParentId(parentDTOS.get(i).getParentId());
-            parentDTO.setParentName(parentDTOS.get(i).getParentName());
+            parentDTO.setParentName(parents.get(i).getParentName());
+            parentDTO.setPhone(parents.get(i).getPhone());
+            parentDTOS.add(parentDTO);
         }
         return parentDTOS;
     }
@@ -43,6 +45,7 @@ public class ParentService {
             parentRepository.save(parent);
             ParentDTO parentDTO = new ParentDTO();
             parentDTO.setParentName(parent.getParentName());
+            parentDTO.setPhone(parent.getPhone());
             return parentDTO;
         }
         else throw new NullPointerException("Parent name is already exist");
@@ -64,6 +67,7 @@ public class ParentService {
         Parent parent = parentRepository.findByParentName(parentName);
         ParentDTOwithChildren parentDTOwithChildren = new ParentDTOwithChildren();
         parentDTOwithChildren.setParentName(parent.getParentName());
+        parentDTOwithChildren.setPhone(parent.getPhone());
         List<Student> studentList = new ArrayList<Student>();
         List<StudentDTO> studentDTOList = new ArrayList<StudentDTO>();
         studentList = studentRepository.findByParent(parent);
@@ -74,5 +78,21 @@ public class ParentService {
         }
         parentDTOwithChildren.setStudentDTOList(studentDTOList);
         return parentDTOwithChildren;
+    }
+
+    public Parent login(Parent parentDTO) {
+        Parent parent = parentRepository.findByParentName(parentDTO.getParentName());
+        if(parent == null){
+            throw new NullPointerException("This parent is not exist");
+        }
+        else if(!parent.getParentPassword().equals(parentDTO.getParentPassword())){
+            throw new NullPointerException("Invalid username/password");
+        }
+        else {
+            parent.setParentPassword(null);
+            parent.setConversationList(null);
+            parent.setParentId(null);
+            return parent;
+        }
     }
 }
