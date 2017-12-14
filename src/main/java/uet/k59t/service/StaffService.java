@@ -107,4 +107,26 @@ public class StaffService {
         }
 
     }
+
+    public StaffDTOwithStudents teachStudent(String token, String studentName) {
+        Staff staff = staffRepository.findByToken(token);
+        if(staff == null) throw new NullPointerException("Invalid token");
+        Student student = studentRepository.findByStudentName(studentName);
+        if(student == null) throw  new NullPointerException("This student is not exist");
+        if(student.getStaffList().contains(staff)) throw new NullPointerException("This student has already been taught by this teacher");
+        student.getStaffList().add(staff);
+        studentRepository.save(student);
+        StaffDTOwithStudents staffDTOwithStudents = new StaffDTOwithStudents();
+        staffDTOwithStudents.setPhone(staff.getPhone());
+        staffDTOwithStudents.setPosition(staff.getPosition());
+        staffDTOwithStudents.setStudentList(staff.getStudentList());
+        staffDTOwithStudents.setUnit(staff.getUnit());
+        staffDTOwithStudents.getUnit().setStaffList(null);
+        staffDTOwithStudents.setStaffName(staff.getStaffName());
+        for (Student x :staffDTOwithStudents.getStudentList()) {
+            x.setStaffList(null);
+            x.setParent(null);
+        }
+        return  staffDTOwithStudents;
+    }
 }

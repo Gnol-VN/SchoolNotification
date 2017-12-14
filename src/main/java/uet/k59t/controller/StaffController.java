@@ -51,7 +51,11 @@ public class StaffController {
         return staffService.findByStaffName(staffName);
 
     }
-
+    @RequestMapping(value = "staff/teachstudent/{studentName}", method = RequestMethod.POST)
+    public StaffDTOwithStudents teachStudent(@PathVariable String studentName){
+        String token = httpServletRequest.getHeader("token");
+        return staffService.teachStudent(token, studentName);
+    }
     @RequestMapping(value = "staff/login", method = RequestMethod.POST)
     public Staff login(@RequestBody StaffDTO staffDTO){
 

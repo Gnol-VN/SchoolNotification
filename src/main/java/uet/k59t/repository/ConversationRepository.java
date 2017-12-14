@@ -12,5 +12,5 @@ import java.util.List;
  */
 @Repository
 public interface ConversationRepository extends CrudRepository<Conversation,Long>{
-
+    Conversation findByConversationName(String conversationName);
 }

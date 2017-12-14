@@ -52,7 +52,10 @@ public class ParentService {
 
     }
 
-    public StudentDTO createStudent(StudentDTO studentDTO) {
+    public StudentDTO createStudent(String token,StudentDTO studentDTO) {
+        Parent parent = parentRepository.findByToken(token);
+        if(parent==null) throw  new NullPointerException("Invalid token");
+        if(studentRepository.findByStudentName(studentDTO.getStudentName())!=null) throw  new NullPointerException("This student name is existed");
         Student student = new Student();
         student.setStudentName(studentDTO.getStudentName());
 //        student.setStaff(staffRepository.findBystaffName(studentDTO.getStaffDTO().getStaffName()));

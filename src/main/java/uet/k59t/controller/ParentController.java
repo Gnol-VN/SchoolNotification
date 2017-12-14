@@ -41,7 +41,7 @@ public class ParentController {
     @RequestMapping(value = "/parent/createstudent",method = RequestMethod.POST)
     public StudentDTO createStudent(@RequestBody StudentDTO studentDTO){
         String token = httpServletRequest.getHeader("token");
-        return parentService.createStudent(studentDTO);
+        return parentService.createStudent(token,studentDTO);
     }
     @RequestMapping(value = "parent/login", method = RequestMethod.POST)
     public Parent login(@RequestBody Parent parentDTO){

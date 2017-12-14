@@ -9,6 +9,7 @@ import uet.k59t.model.Message;
 import uet.k59t.service.ConversationService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by Longlaptop on 11/30/2017.
@@ -31,10 +32,16 @@ public class ConversationController {
 //        return conversationService.join(token,conversationId);
 //    }
 
-    @RequestMapping(value = "conversation/invite/{conversationId}/{parentName}", method = RequestMethod.POST)
-    public ConversationDTOwithStaffAndParent invite(@PathVariable Long conversationId, @PathVariable String parentName){
+    @RequestMapping(value = "conversation/inviteparent/{conversationId}/{parentName}", method = RequestMethod.POST)
+    public ConversationDTOwithStaffAndParent inviteParent(@PathVariable Long conversationId, @PathVariable String parentName){
         String token = httpServletRequest.getHeader("token");
-        return conversationService.invite(token,conversationId,parentName);
+        return conversationService.inviteParent(token,conversationId,parentName);
+
+    }
+    @RequestMapping(value = "conversation/invitestaff/{conversationId}/{staffName}", method = RequestMethod.POST)
+    public ConversationDTOwithStaffAndParent inviteStaff(@PathVariable Long conversationId, @PathVariable String staffName){
+        String token = httpServletRequest.getHeader("token");
+        return conversationService.inviteStaff(token,conversationId,staffName);
 
     }
 
@@ -48,5 +55,10 @@ public class ConversationController {
     public MessageDTO sendMessage(@PathVariable Long conversationId, @RequestBody Message message){
         String token = httpServletRequest.getHeader("token");
         return conversationService.sendMessage(token,conversationId,message);
+    }
+    @RequestMapping(value = "conversation/containme", method = RequestMethod.GET)
+    public List<ConversationDTOwithStaffAndParent> findConversationContainMe(){
+        String token = httpServletRequest.getHeader("token");
+        return conversationService.findConversationContainMe(token);
     }
 }
