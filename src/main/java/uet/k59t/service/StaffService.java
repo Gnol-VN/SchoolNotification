@@ -1,5 +1,9 @@
 package uet.k59t.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.k59t.controller.dto.StaffDTO;
@@ -14,6 +18,13 @@ import uet.k59t.repository.StaffRepository;
 import uet.k59t.repository.StudentRepository;
 import uet.k59t.repository.UnitRepository;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -131,6 +142,47 @@ public class StaffService {
     }
 
     public List<StaffDTO> migrateDb() {
-        return null;
+        List<StaffDTO> staffDTOList = new ArrayList<>();
+        String sURL = "http://192.168.1.101/school1/index.php?admin/listAllTeacher"; //just a string
+
+        // Connect to the URL using java's native library
+        URL url = null;
+        try {
+            url = new URL(sURL);
+            URLConnection request = url.openConnection();
+            request.connect();
+
+            // Convert to a JSON object to print data
+            JsonParser jp = new JsonParser(); //from gson
+            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
+            JsonArray rootobj = root.getAsJsonArray(); //May be an array, may be an object.
+             //just grab the zipcode
+
+            for(int i = 0; i < rootobj.size(); i++){
+                JsonObject teacherGson = rootobj.get(i).getAsJsonObject();
+                if(staffRepository.findByEmail(teacherGson.get("email").toString()) == null) {
+                    StaffDTO staffDTO = new StaffDTO();
+                    Staff staff = new Staff();
+                    staff.setId(teacherGson.get("teacher_id").getAsLong());
+                    staff.setStaffName(teacherGson.get("name").getAsString());
+                    staff.setPassword(teacherGson.get("password").getAsString());
+                    staff.setEmail(teacherGson.get("email").getAsString());
+                    staff.setPhone(teacherGson.get("phone").getAsString());
+                    staff.setToken(UUID.randomUUID().toString());
+                    staffRepository.save(staff);
+                    staffDTO.setPhone(staff.getPhone());
+                    staffDTO.setStaffName(staff.getStaffName());
+                    staffDTO.setPassword(staff.getPassword());
+                    staffDTOList.add(staffDTO);
+                }
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return staffDTOList;
+
     }
 }

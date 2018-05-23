@@ -17,7 +17,7 @@ import java.net.URLConnection;
  */
 public class TestGson {
     public static void main(String[] args) throws IOException {
-        String sURL = "http://192.168.1.105/school1/index.php?admin/listAllTeacher"; //just a string
+        String sURL = "http://192.168.1.101/school1/index.php?admin/listAllParent"; //just a string
 
         // Connect to the URL using java's native library
         URL url = new URL(sURL);

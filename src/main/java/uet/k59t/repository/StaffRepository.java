@@ -11,5 +11,6 @@ import java.util.List;
 public interface StaffRepository extends CrudRepository<Staff, Long> {
     Staff findBystaffName(String staffName);
     Staff findByToken(String token);
+    Staff findByEmail(String email);
     List<Staff> findByStudentList_StudentName(String studentName);
 }

@@ -7,12 +7,33 @@ import java.util.List;
  * Created by Longlaptop on 11/28/2017.
  */
 @Entity
-public class Staff  {
+public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String staffName;
     private String phone;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "positionId")
+    private Position position;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "unitId")
+    private Unit unit;
+    @ManyToMany(mappedBy = "staffList")
+    private List<Student> studentList;
+    @ManyToMany(mappedBy = "staffList")
+    private List<Conversation> conversationList;
+    private String password;
+    private String token;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getPhone() {
         return phone;
@@ -21,20 +42,6 @@ public class Staff  {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name="positionId")
-    private Position position;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name="unitId")
-    private Unit unit;
-
-    @ManyToMany(mappedBy = "staffList")
-    private List<Student> studentList;
-
-    @ManyToMany(mappedBy = "staffList")
-    private List<Conversation> conversationList;
 
     public List<Conversation> getConversationList() {
         return conversationList;
@@ -51,9 +58,6 @@ public class Staff  {
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
-
-    private String password;
-    private String token;
 
     public Unit getUnit() {
         return unit;

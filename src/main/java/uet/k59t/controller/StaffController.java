@@ -25,6 +25,7 @@ public class StaffController {
 
     @RequestMapping(value = "staff/migratedb", method = RequestMethod.GET)
     public List<StaffDTO> migratedbStaff(){
+
         return staffService.migrateDb();
     }
     @RequestMapping(value = "admin/login", method = RequestMethod.POST)
