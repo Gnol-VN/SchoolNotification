@@ -148,6 +148,7 @@ public class StaffService {
         // Connect to the URL using java's native library
         URL url = null;
         try {
+
             url = new URL(sURL);
             URLConnection request = url.openConnection();
             request.connect();

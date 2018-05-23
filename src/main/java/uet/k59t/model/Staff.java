@@ -17,6 +17,7 @@ public class Staff {
     @JoinColumn(name = "positionId")
     private Position position;
     @ManyToOne(optional = true)
+
     @JoinColumn(name = "unitId")
     private Unit unit;
     @ManyToMany(mappedBy = "staffList")
