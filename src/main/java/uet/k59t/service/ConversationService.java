@@ -188,6 +188,7 @@ public class ConversationService {
         if(conversation != null){
             Staff checkStaff = staffRepository.findByToken(token);
             Parent checkParent = parentRepository.findByToken(token);
+
             if(checkStaff!= null || checkParent != null){
                 if(conversation.getStaffList().contains(checkStaff) || conversation.getParentList().contains(checkParent)){
                     Parent parent = parentRepository.findByParentName(parentName);

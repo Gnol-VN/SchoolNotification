@@ -129,4 +129,8 @@ public class StaffService {
         }
         return  staffDTOwithStudents;
     }
+
+    public List<StaffDTO> migrateDb() {
+        return null;
+    }
 }

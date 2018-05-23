@@ -40,6 +40,7 @@ public class Application {
                 HttpServletRequest request = (HttpServletRequest) req;
                 HttpServletResponse response = (HttpServletResponse) res;
                 String method = request.getMethod();
+
 // this origin value could just as easily have come from a database
                 response.setHeader("Access-Control-Allow-Origin", "*");
                 response.setHeader("Access-Control-Allow-Methods",

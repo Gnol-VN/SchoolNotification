@@ -11,6 +11,7 @@ import uet.k59t.service.StaffService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Null;
+import java.util.List;
 
 /**
  * Created by Long on 11/21/2016.
@@ -22,6 +23,10 @@ public class StaffController {
     @Autowired
     private HttpServletRequest httpServletRequest;
 
+    @RequestMapping(value = "staff/migratedb", method = RequestMethod.GET)
+    public List<StaffDTO> migratedbStaff(){
+        return staffService.migrateDb();
+    }
     @RequestMapping(value = "admin/login", method = RequestMethod.POST)
     public AdminDTO adminLogin(@RequestBody AdminDTO adminDTO){
         if(adminDTO.getAdminUsername().equals("admin") && adminDTO.getAdminPassword().equals("admin")){
