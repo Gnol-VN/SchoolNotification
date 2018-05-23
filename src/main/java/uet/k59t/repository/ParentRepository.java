@@ -11,4 +11,5 @@ import uet.k59t.model.Parent;
 public interface ParentRepository extends CrudRepository<Parent,Long> {
     Parent findByParentName(String parentName);
     Parent findByToken(String token);
+    Parent findByEmail(String email);
 }

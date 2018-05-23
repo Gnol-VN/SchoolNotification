@@ -1,15 +1,27 @@
 package uet.k59t.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.k59t.controller.dto.ParentDTO;
 import uet.k59t.controller.dto.ParentDTOwithChildren;
+
 import uet.k59t.controller.dto.StudentDTO;
 import uet.k59t.model.Parent;
+
 import uet.k59t.model.Student;
 import uet.k59t.repository.ParentRepository;
 import uet.k59t.repository.StudentRepository;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -97,5 +109,51 @@ public class ParentService {
             parent.setParentId(null);
             return parent;
         }
+    }
+
+    public List<ParentDTO> migrateDb() {
+        List<ParentDTO> parentDTOList = new ArrayList<>();
+        String sURL = "http://192.168.1.101/school1/index.php?admin/listAllParent"; //just a string
+
+        // Connect to the URL using java's native library
+        URL url = null;
+        try {
+            url = new URL(sURL);
+            URLConnection request = url.openConnection();
+            request.connect();
+
+            // Convert to a JSON object to print data
+            JsonParser jp = new JsonParser(); //from gson
+            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent())); //Convert the input stream to a json element
+            JsonArray rootobj = root.getAsJsonArray(); //May be an array, may be an object.
+            //just grab the zipcode
+
+            for(int i = 0; i < rootobj.size(); i++){
+                JsonObject parentGson = rootobj.get(i).getAsJsonObject();
+                if(parentRepository.findByEmail(parentGson.get("email").toString()) == null) {
+                    ParentDTO parentDTO = new ParentDTO();
+                    Parent parent = new Parent();
+                    parent.setParentId(parentGson.get("parent_id").getAsLong());
+                    parent.setParentName(parentGson.get("name").getAsString());
+                    parent.setParentPassword(parentGson.get("password").getAsString());
+                    parent.setEmail(parentGson.get("email").getAsString());
+                    parent.setPhone(parentGson.get("phone").getAsString());
+                    parent.setToken(UUID.randomUUID().toString());
+                    parentRepository.save(parent);
+                    parentDTO.setPhone(parent.getPhone());
+                    parentDTO.setParentName(parent.getParentName());
+                    parentDTO.setParentId(parent.getParentId());
+                    parentDTOList.add(parentDTO);
+                }
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return parentDTOList;
+
+
     }
 }

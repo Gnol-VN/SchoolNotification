@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uet.k59t.controller.dto.ParentDTO;
 import uet.k59t.controller.dto.ParentDTOwithChildren;
+import uet.k59t.controller.dto.StaffDTO;
 import uet.k59t.controller.dto.StudentDTO;
 import uet.k59t.model.Parent;
 import uet.k59t.service.ParentService;
@@ -20,6 +21,13 @@ public class ParentController {
     ParentService parentService;
     @Autowired
     private HttpServletRequest httpServletRequest;
+
+    @RequestMapping(value = "parent/migratedb", method = RequestMethod.GET)
+    public List<ParentDTO> migratedbStaff(){
+
+        return parentService.migrateDb();
+    }
+
     @RequestMapping(value = "parent/showall", method = RequestMethod.GET)
     public List<ParentDTO> parentDTOS(){
         String token = httpServletRequest.getHeader("token");
