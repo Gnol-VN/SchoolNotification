@@ -45,7 +45,7 @@ public class ConversationService {
             Staff staffWithLittleInfo = new Staff();
             staffWithLittleInfo.setStaffName(staff.getStaffName());
             staffWithLittleInfo.setUnit(staff.getUnit());
-            staffWithLittleInfo.getUnit().setStaffList(null);
+//            staffWithLittleInfo.getUnit().setStaffList(null);
             staffWithLittleInfo.setPosition(staff.getPosition());
             staffList.clear();
             staffList.add(staffWithLittleInfo);
@@ -130,7 +130,7 @@ public class ConversationService {
             staffDTO.setPosition(staff.getPosition());
             staffDTO.setPhone(staff.getPhone());
             staffDTO.setUnit(staff.getUnit());
-            staffDTO.getUnit().setStaffList(null);
+//            staffDTO.getUnit().setStaffList(null);
             staffDTOList.add(staffDTO);
         }
         conversationDTOwithStaffAndParent.setStaffDTOList(staffDTOList);
@@ -224,7 +224,7 @@ public class ConversationService {
                         staffDTO.setStaffName(staff1.getStaffName());
                         staffDTO.setPosition(staff1.getPosition());
                         staffDTO.setUnit(staff1.getUnit());
-                        staffDTO.getUnit().setStaffList(null);
+//                        staffDTO.getUnit().setStaffList(null);
                         staffDTO.setPhone(staff1.getPhone());
                         staffDTOList.add(staffDTO);
                     }
@@ -289,7 +289,7 @@ public class ConversationService {
                         staffDTO.setStaffName(staff1.getStaffName());
                         staffDTO.setPosition(staff1.getPosition());
                         staffDTO.setUnit(staff1.getUnit());
-                        staffDTO.getUnit().setStaffList(null);
+//                        staffDTO.getUnit().setStaffList(null);
                         staffDTO.setPhone(staff1.getPhone());
                         staffDTOList.add(staffDTO);
                     }
@@ -363,7 +363,7 @@ public class ConversationService {
                     staffDTO.setPhone(x.getPhone());
                     staffDTO.setPosition(x.getPosition());
                     staffDTO.setUnit(x.getUnit());
-                    staffDTO.getUnit().setStaffList(null);
+//                    staffDTO.getUnit().setStaffList(null);
                     staffDTO.setStaffName(x.getStaffName());
                     staffDTOList.add(staffDTO);
                 }
@@ -419,7 +419,7 @@ public class ConversationService {
                     staffDTO.setPhone(x.getPhone());
                     staffDTO.setPosition(x.getPosition());
                     staffDTO.setUnit(x.getUnit());
-                    staffDTO.getUnit().setStaffList(null);
+//                    staffDTO.getUnit().setStaffList(null);
                     staffDTO.setStaffName(x.getStaffName());
                     staffDTOList.add(staffDTO);
                 }

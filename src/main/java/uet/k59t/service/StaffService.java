@@ -4,8 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import uet.k59t.ScheduledTasks;
 import uet.k59t.controller.dto.StaffDTO;
 import uet.k59t.controller.dto.StaffDTOwithPositionAndUnitname;
 import uet.k59t.controller.dto.StaffDTOwithStudents;
@@ -25,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +38,8 @@ import java.util.UUID;
  */
 @Service
 public class StaffService {
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
     @Autowired
     StaffRepository staffRepository;
 
@@ -75,7 +82,7 @@ public class StaffService {
             staffDTO.setPosition(staff.getPosition());
             staffDTO.setUnit(staff.getUnit());
             staffDTO.setPhone(staff.getPhone());
-            staffDTO.getUnit().setStaffList(null);
+//            staffDTO.getUnit().setStaffList(null);
             return staffDTO;
         }
         else throw new NullPointerException("Invalid id");
@@ -95,12 +102,12 @@ public class StaffService {
             studentList.get(i).setParent(null);
         }
         staffDTOwithStudents.setStudentList(studentList);
-        staffDTOwithStudents.getUnit().setStaffList(null);
+//        staffDTOwithStudents.getUnit().setStaffList(null);
         return staffDTOwithStudents;
     }
 
     public Staff login(StaffDTO staffDTO) {
-        Staff staff = staffRepository.findBystaffName(staffDTO.getStaffName());
+        Staff staff = staffRepository.findByEmail(staffDTO.getEmail());
         if(staff == null){
             throw new NullPointerException("This staff is not exist");
         }
@@ -113,7 +120,7 @@ public class StaffService {
             staff.setStudentList(null);
             staff.setId(null);
             staff.setStudentList(null);
-            staff.getUnit().setStaffList(null);
+//            staff.getUnit().setStaffList(null);
             return staff;
         }
 
@@ -132,7 +139,7 @@ public class StaffService {
         staffDTOwithStudents.setPosition(staff.getPosition());
         staffDTOwithStudents.setStudentList(staff.getStudentList());
         staffDTOwithStudents.setUnit(staff.getUnit());
-        staffDTOwithStudents.getUnit().setStaffList(null);
+//        staffDTOwithStudents.getUnit().setStaffList(null);
         staffDTOwithStudents.setStaffName(staff.getStaffName());
         for (Student x :staffDTOwithStudents.getStudentList()) {
             x.setStaffList(null);
@@ -141,9 +148,10 @@ public class StaffService {
         return  staffDTOwithStudents;
     }
 
+    @Scheduled(fixedRate = 5000)
     public List<StaffDTO> migrateDb() {
         List<StaffDTO> staffDTOList = new ArrayList<>();
-        String sURL = "http://192.168.1.101/school1/index.php?admin/listAllTeacher"; //just a string
+        String sURL = "http://localhost/school1/index.php?admin/listAllTeacher"; //just a string
 
         // Connect to the URL using java's native library
         URL url = null;
@@ -161,7 +169,7 @@ public class StaffService {
 
             for(int i = 0; i < rootobj.size(); i++){
                 JsonObject teacherGson = rootobj.get(i).getAsJsonObject();
-                if(staffRepository.findByEmail(teacherGson.get("email").toString()) == null) {
+                if(staffRepository.findByEmail(teacherGson.get("email").getAsString()) == null) {
                     StaffDTO staffDTO = new StaffDTO();
                     Staff staff = new Staff();
                     staff.setId(teacherGson.get("teacher_id").getAsLong());
@@ -182,6 +190,7 @@ public class StaffService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        log.info("Migrate Staff DB");
 
         return staffDTOList;
 

@@ -4,8 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import uet.k59t.ScheduledTasks;
 import uet.k59t.controller.dto.ParentDTO;
 import uet.k59t.controller.dto.ParentDTOwithChildren;
 
@@ -31,6 +35,8 @@ import java.util.UUID;
  */
 @Service
 public class ParentService {
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+
     @Autowired
     ParentRepository parentRepository;
     @Autowired
@@ -96,7 +102,7 @@ public class ParentService {
     }
 
     public Parent login(Parent parentDTO) {
-        Parent parent = parentRepository.findByParentName(parentDTO.getParentName());
+        Parent parent = parentRepository.findByEmail(parentDTO.getEmail());
         if(parent == null){
             throw new NullPointerException("This parent is not exist");
         }
@@ -111,9 +117,10 @@ public class ParentService {
         }
     }
 
+    @Scheduled(fixedRate = 5000)
     public List<ParentDTO> migrateDb() {
         List<ParentDTO> parentDTOList = new ArrayList<>();
-        String sURL = "http://192.168.1.101/school1/index.php?admin/listAllParent"; //just a string
+        String sURL = "http://localhost/school1/index.php?admin/listAllParent";
 
         // Connect to the URL using java's native library
         URL url = null;
@@ -130,7 +137,7 @@ public class ParentService {
 
             for(int i = 0; i < rootobj.size(); i++){
                 JsonObject parentGson = rootobj.get(i).getAsJsonObject();
-                if(parentRepository.findByEmail(parentGson.get("email").toString()) == null) {
+                if(parentRepository.findByEmail(parentGson.get("email").getAsString()) == null) {
                     ParentDTO parentDTO = new ParentDTO();
                     Parent parent = new Parent();
                     parent.setParentId(parentGson.get("parent_id").getAsLong());
@@ -151,9 +158,8 @@ public class ParentService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        log.info("Migrate Parent DB");
 
         return parentDTOList;
-
-
     }
 }

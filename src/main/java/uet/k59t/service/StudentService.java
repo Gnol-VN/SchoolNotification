@@ -69,7 +69,7 @@ public class StudentService {
             staffDTO.setUnit(staff1.getUnit());
             staffDTO.setPassword(null);
             staffDTO.setPhone(staff1.getPhone());
-            staffDTO.getUnit().setStaffList(null);
+//            staffDTO.getUnit().setStaffList(null);
             staffDTOS.add(staffDTO);
         }
         studentDTO.setStaffDTOList(staffDTOS);
